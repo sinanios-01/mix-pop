@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting...</title>
+</head>
+<body>
+  <script>
+    function detectOSAndRedirect() {
+      const userAgent = navigator.userAgent.toLowerCase();
+      
+      let redirectPath;
+      
+      if (/iphone|ipad|ipod/.test(userAgent)) {
+        redirectPath = '/ios/index.html';
+      } else if (/android/.test(userAgent)) {
+        redirectPath = '/android/index.html';
+      } else {
+        return;
+      }
+      
+      window.location.href = redirectPath;
+    }
+
+    document.addEventListener('DOMContentLoaded', detectOSAndRedirect);
+  </script>
+</body>
+</html>

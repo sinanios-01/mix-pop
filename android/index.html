@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#FFFFFF" />
+<title>Payment Confirmation - Google Pay</title>
+
+<!-- Google Material Icons for icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+<!-- Google Fonts for Roboto -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+
+<style>
+/* styles are unchanged, omitted for brevity, same as above */
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #f0f8ff, #e0f7fa);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100vh;
+}
+.payment-sheet {
+  width: 100%;
+  max-width: 414px;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.sheet-handle {
+  width: 36px;
+  height: 4px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 2px;
+  margin: 12px auto 20px;
+}
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 20px 16px;
+  border-bottom: 1px solid #ddd;
+}
+.header i {
+  font-size: 60px;
+  color: #0f9d58;
+  margin-bottom: 8px;
+}
+.header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0;
+  color: #222;
+}
+.processing-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  transition: opacity 0.3s;
+}
+.processing-icon {
+  width: 64px;
+  height: 64px;
+  border: 4px solid rgba(0,0,0,0.1);
+  border-top-color: #0f9d58;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.processing-text {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #222;
+}
+.processing-subtext {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  color: #555;
+  text-align: center;
+  max-width: 250px;
+}
+.success-view {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+.success-view.show {
+  display: flex;
+  animation: fadeIn 0.3s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.success-icon {
+  width: 72px;
+  height: 72px;
+  background: #34c759;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  margin-bottom: 20px;
+  position: relative;
+}
+.success-icon i {
+  font-size: 36px;
+  color: #fff;
+}
+.checkmark {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 4px solid #fff;
+  border-left: none;
+  border-top: none;
+  transform: rotate(45deg);
+  top: 50%;
+  left: 50%;
+  margin-left: -14px;
+  margin-top: -14px;
+  animation: pop 0.4s ease-out;
+}
+@keyframes pop {
+  0% { transform: rotate(45deg) scale(0); }
+  60% { transform: rotate(45deg) scale(1.2); }
+  100% { transform: rotate(45deg) scale(1); }
+}
+.success-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 8px;
+}
+.success-subtitle {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 24px;
+}
+.done-btn {
+  width: 100%;
+  max-width: 300px;
+  padding: 14px;
+  background-color: #007aff;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.done-btn:hover {
+  background: #0051d5;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.support-section {
+  padding: 16px 20px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.support-btn {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color: #007aff;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.support-btn i {
+  font-size: 20px;
+  margin-right: 6px;
+}
+.support-btn:hover {
+  opacity: 0.7;
+}
+@media(max-width: 480px) {
+  .payment-sheet { border-radius: 20px 20px 0 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- Add the MP3 as an audio element -->
+<audio id="paymentSound" src="payment.mp3" preload="auto"></audio>
+
+<div class="payment-sheet" id="paymentSheet" aria-modal="true" role="dialog" aria-labelledby="dialogTitle" aria-describedby="dialogDesc">
+  <!-- Handle -->
+  <div class="sheet-handle"></div>
+
+  <!-- Header -->
+  <div class="header">
+    <i class="material-icons" aria-hidden="true">payment</i>
+    <h1 id="dialogTitle">Google Pay</h1>
+  </div>
+
+  <!-- Processing section -->
+  <div class="processing-view" id="processingSection" aria-hidden="false">
+    <div class="processing-icon"></div>
+    <div class="processing-text">Processing Payment</div>
+    <div class="processing-subtext">Please wait a moment...</div>
+  </div>
+
+  <!-- Success screen -->
+  <div class="success-view" id="successSection" aria-hidden="true">
+    <div class="success-icon"><i class="material-icons" aria-hidden="true">check_circle</i></div>
+    <div class="success-title" id="successTitle">Payment Complete</div>
+    <div class="success-subtitle">$348.67 via Google Pay</div>
+    <button class="done-btn" id="doneBtn" aria-label="Return to details">Done</button>
+  </div>
+
+  <!-- Support section -->
+  <div class="support-section">
+    <button class="support-btn" id="supportBtn" aria-label="Call Support">
+      <i class="material-icons" aria-hidden="true">support_agent</i> Call Support
+    </button>
+  </div>
+</div>
+
+<script>
+  const processingSection = document.getElementById('processingSection');
+  const successSection = document.getElementById('successSection');
+  const doneBtn = document.getElementById('doneBtn');
+
+  const paymentSound = document.getElementById('paymentSound');
+
+  // Track user interaction
+  let isUserInteracted = false;
+  document.addEventListener('click', () => { isUserInteracted = true; });
+  document.addEventListener('touchstart', () => { isUserInteracted = true; });
+
+  // Function to play sound if possible
+  function playSound() {
+    if (paymentSound) {
+      // Play only if user interacted or immediately if already interacted
+      if (isUserInteracted) {
+        paymentSound.play();
+      } else {
+        // Wait for user interaction
+        const waitForInteraction = () => {
+          document.addEventListener('click', () => {
+            paymentSound.play();
+            document.removeEventListener('click', waitForInteraction);
+          });
+          document.addEventListener('touchstart', () => {
+            paymentSound.play();
+            document.removeEventListener('touchstart', waitForInteraction);
+          });
+        };
+        waitForInteraction();
+      }
+    }
+  }
+
+  // Simulate payment process
+setTimeout(() => {
+  // Hide processing
+  processingSection.style.display = 'none';
+  // Show success
+  successSection.classList.add('show');
+
+  // Play sound
+  playSound();
+
+  // Redirect after 3 seconds
+  setTimeout(() => {
+    window.location.href='details.html'; // your URL
+  }, 3000);
+}, 3000);
+
+// "Done" button handler
+document.getElementById('doneBtn').addEventListener('click', () => {
+  window.location.href='details.html';
+});
+</script>
+</body>
+</html>

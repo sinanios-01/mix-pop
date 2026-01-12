@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Receipt from Google Play</title>
+<meta name="theme-color" content="#FFFFFF" />
+
+<!-- Google Fonts for Roboto -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+
+<!-- Material Icons for icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+<style>
+/* Reset & base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Roboto', sans-serif;
+  background: #f5f5f7;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Container with subtle shadow and rounded corners for a premium feel */
+.receipt-container {
+  max-width: 700px;
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  margin-top: 20px;
+  animation: slideUp 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Top contact notice */
+.top-notice {
+  background: #e0f7fa;
+  padding: 16px;
+  text-align: center;
+  border-bottom: 1px solid #d2d2d7;
+  font-size: 14px;
+}
+.notice-text {
+  line-height: 1.6;
+  color: #1d1d1f;
+}
+.notice-number {
+  color: #007aff;
+  font-weight: 600;
+  text-decoration: none;
+}
+.notice-number:hover {
+  text-decoration: underline;
+}
+.call-btn {
+  margin-left: 8px;
+  padding: 8px 12px;
+  background-color: #007aff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.call-btn:active {
+  background-color: #0051d5;
+}
+
+/* Header with logo and title */
+.receipt-header {
+  background: #fff;
+  padding: 48px 20px 32px;
+  text-align: center;
+  border-bottom: 1px solid #d2d2d7;
+}
+.google-logo svg {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 8px;
+  fill: #34a853; /* Google Green */
+}
+.receipt-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 8px;
+}
+.receipt-subtitle {
+  font-size: 16px;
+  color: #86868b;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Main body padding */
+.receipt-body {
+  padding: 20px;
+}
+
+/* Order summary styles */
+.order-summary {
+  margin-bottom: 40px;
+}
+.summary-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 20px;
+}
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 14px 0;
+  border-bottom: 1px solid #d2d2d7;
+}
+.summary-row:last-child {
+  border-top: 2px solid #d2d2d7;
+  border-bottom: none;
+  padding-top: 20px;
+}
+.item-info {
+  flex: 1;
+  padding-right: 10px;
+}
+.item-name {
+  font-size: 17px;
+  font-weight: 400;
+  color: #222;
+  margin-bottom: 4px;
+}
+.item-details {
+  font-size: 14px;
+  color: #86868b;
+  line-height: 1.6;
+}
+.item-price {
+  font-size: 17px;
+  font-weight: 600;
+  color: #222;
+  margin-left: 20px;
+  white-space: nowrap;
+}
+
+/* Total row styling */
+.total-row .item-name,
+.total-row .item-price {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Payment method styles */
+.payment-method {
+  margin-bottom: 40px;
+}
+.method-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 16px;
+}
+.method-card {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.card-info {
+  flex: 1;
+}
+.card-type {
+  font-size: 15px;
+  font-weight: 600;
+  color: #222;
+  display: flex;
+  align-items: center;
+}
+.card-type i {
+  font-size: 20px;
+  margin-right: 8px;
+  color: #4285f4;
+}
+
+/* Order info styles */
+.order-info {
+  background: #f0f0f0;
+  padding: 24px;
+  border-radius: 8px;
+  margin-bottom: 32px;
+}
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+}
+.info-label {
+  color: #86868b;
+}
+.info-value {
+  color: #222;
+  font-weight: 500;
+  text-align: right;
+}
+
+/* Help section styles */
+.help-section {
+  padding: 32px 20px;
+  background: #f0f0f0;
+  border-top: 1px solid #d2d2d7;
+  text-align: center;
+}
+.help-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 12px;
+}
+.help-text {
+  font-size: 14px;
+  color: #86868b;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Call button style */
+.call-btn {
+  margin-left: 8px;
+  padding: 8px 12px;
+  background-color: #007aff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.call-btn:active {
+  background-color: #0051d5;
+}
+
+/* Action buttons */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  padding: 32px 20px;
+  border-top: 1px solid #d2d2d7;
+}
+.btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+.btn-primary {
+  background: #4285f4;
+  color: #fff;
+}
+.btn-primary:hover {
+  background: #3367d6;
+}
+.btn-secondary {
+  background: transparent;
+  color: #4285f4;
+  border: 1px solid #4285f4;
+}
+.btn-secondary:hover {
+  background: #e8f0fe;
+}
+
+/* Footer styles */
+.footer {
+  padding: 32px 20px;
+  text-align: center;
+  background: #f0f0f0;
+  border-top: 1px solid #d2d2d7;
+  font-size: 12px;
+  color: #86868b;
+}
+.footer-text {
+  line-height: 1.8;
+}
+.footer-links {
+  margin-top: 16px;
+}
+.footer-link {
+  color: #0066cc;
+  text-decoration: none;
+  font-size: 12px;
+  margin: 0 12px;
+}
+.footer-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 600px) {
+  .receipt-header, .receipt-body, .help-section, .footer {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .summary-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .item-price {
+    margin-left: 0;
+    margin-top: 8px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="receipt-container" id="receipt">
+  <!-- Top notice with contact info -->
+  <div class="top-notice">
+    <p class="notice-text">
+      For support or to request a refund, contact Google Play Support at
+      <a href="tel:+18335802790" class="notice-number">+1 833 580 2790</a>
+      <button class="call-btn" onclick="window.location.href='tel:+18335802790'">Call</button>
+    </p>
+  </div>
+
+  <!-- Header with logo and title -->
+  <div class="receipt-header">
+    <div class="google-logo">
+      <!-- SVG Google Play Logo -->
+      <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="#34a853">
+        <path d="M325.6 124.4L179.7 157.8 219 255.2 179.7 352.6 325.6 385 289 255.2 325.6 124.4z"/>
+        <path d="M256 0C114.624 0 0 114.624 0 256s114.624 256 256 256 256-114.624 256-256S397.376 0 256 0zm0 48c124.096 0 224 99.904 224 224s-99.904 224-224 224S32 396.096 32 272 131.904 48 256 48zm-40 304h-64v-48h64v48zm144 0h-64v-48h64v48zm-144-80h-64v-48h64v48zm144 0h-64v-48h64v48z"/>
+      </svg>
+    </div>
+    <p class="receipt-title">Thank you for your purchase</p>
+  </div>
+
+  <!-- Main body with order details -->
+  <div class="receipt-body">
+    <!-- Order summary -->
+    <div class="order-summary">
+      <h2 class="summary-title">Order Summary</h2>
+      <div class="summary-row">
+        <div class="item-info">
+          <div class="item-name">Google Play Gift Card</div>
+          <div class="item-details">Digital delivery via email</div>
+        </div>
+        <div class="item-price">$143.95</div>
+      </div>
+      <div class="summary-row total-row">
+        <div class="item-info">
+          <div class="item-name">Total</div>
+        </div>
+        <div class="item-price">$143.95</div>
+      </div>
+    </div>
+
+    <!-- Payment method -->
+    <div class="payment-method">
+      <h2 class="method-title">Payment Method</h2>
+      <div class="method-card">
+        <div class="card-info">
+          <div class="card-type"><i class="material-icons">payment</i> Google Pay</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order info -->
+    <div class="order-info">
+      <div class="info-row">
+        <span class="info-label">Order Number</span>
+        <span class="info-value">GPA847291025</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Order Date</span>
+        <span class="info-value" id="orderDate"></span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Payment Status</span>
+        <span class="info-value">Paid</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help section -->
+  <div class="help-section">
+    <h3 class="help-title">Questions? We're here to help.</h3>
+    <p class="help-text">
+      For questions about your order or to request a refund, contact Google Support at
+      <a href="tel:+18335802790" class="contact-number">+1 833 580 2790</a>
+      <button class="call-btn" onclick="window.location.href='tel:+18335802790'">Call</button>
+    </p>
+  </div>
+
+  <!-- Action buttons -->
+  <div class="action-buttons">
+    <button class="btn btn-secondary" onclick="window.print()">Print Receipt</button>
+    <button class="btn btn-primary" id="downloadBtn">Download PDF</button>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p class="footer-text">
+      For assistance or questions about your order, call
+      <a href="tel:+18335802790" class="notice-number">+1 833 580 2790</a>
+      <button class="call-btn" onclick="window.location.href='tel:+18335802790'">Call</button><br><br>
+      Google LLC<br>
+      1600 Amphitheatre Parkway, Mountain View, CA 94043, USA<br>
+      All rights reserved.
+    </p>
+    <div class="footer-links">
+      <a href="#" class="footer-link">Privacy Policy</a>
+      <a href="#" class="footer-link">Terms of Sale</a>
+      <a href="#" class="footer-link">Legal</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Set current date
+  const now = new Date();
+  const dateOptions = { month: 'long', day: 'numeric', year: 'numeric' };
+  document.getElementById('orderDate').textContent = now.toLocaleDateString('en-US', dateOptions);
+
+  // Download PDF functionality
+  document.getElementById('downloadBtn').addEventListener('click', async function() {
+    const btn = this;
+    const originalText = btn.textContent;
+    btn.textContent = 'Downloading...';
+    btn.disabled = true;
+    try {
+      const response = await fetch('invoice.pdf');
+      if (!response.ok) throw new Error('Invoice not found');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = 'Google_Invoice_' + Date.now() + '.pdf';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      btn.textContent = originalText;
+      btn.disabled = false;
+    } catch (error) {
+      alert('Could not find invoice.pdf. Make sure the file exists.\nError: ' + error.message);
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
